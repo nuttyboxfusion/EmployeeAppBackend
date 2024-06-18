@@ -43,6 +43,15 @@ This is the front-end application for the Employee Management System, built with
 ├── package.json
 └── tsconfig.json
 
+## Dependencies
+
+1.React
+2. TypeScript
+3. Ant Design
+4. Axios (for API calls)
+5. Day.js (for date handling)
+6. Redux Actions
+
 
 
 
