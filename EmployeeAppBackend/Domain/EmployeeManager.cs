@@ -11,18 +11,21 @@ namespace EmployeeAppBackend.Domain
     public class EmployeeManager
     {
         private readonly IRepository<Employee> _employeeRepository;
+        private readonly IRepository<Skill> _skillRepository;
         private readonly IMapper _mapper;
         private static Random random = new Random();
 
-        public EmployeeManager(IRepository<Employee> employeeRepository, IMapper mapper)
+        public EmployeeManager(IRepository<Employee> employeeRepository, IMapper mapper, IRepository<Skill> skillRepository)
         {
             _employeeRepository = employeeRepository;
+            _skillRepository = skillRepository;
             _mapper = mapper;
+
         }
 
         public async Task<List<EmployeeDto>> GetAllEmployeesAsync()
         {
-            var employees = await _employeeRepository.GetAllAsync();
+            var employees = await _employeeRepository.GetAllIncludingAsync(x=> x.Skills);
 
             return _mapper.Map<List<EmployeeDto>>(employees);
         }
@@ -39,27 +42,41 @@ namespace EmployeeAppBackend.Domain
             return _mapper.Map<EmployeeDto>(employee);
         }
 
-        public async Task<EmployeeDto> CreateEmployeeAsync(EmployeeDto employeeCreateDto)
+        public async Task<EmployeeDto> CreateEmployeeAsync(EmployeeCreateDto employeeCreateDto)
         {
-
-            foreach (var skill in employeeCreateDto.Skills)
+            try
             {
-                skill.EmployeeId = employeeCreateDto.Id;
+                var employee = _mapper.Map<Employee>(employeeCreateDto);
+                employee.Id = GenerateEmployeeId();
+
+                employee.Address = _mapper.Map<Address>(employeeCreateDto.Address);
+
+                employee.Skills = employeeCreateDto.Skills.Select(s =>
+                {
+                    var skill = _mapper.Map<Skill>(s);
+                    skill.EmployeeId = employee.Id;
+                    return skill;
+                }).ToList();
+
+                await _employeeRepository.AddAsync(employee);
+
+                return _mapper.Map<EmployeeDto>(employee);
+
             }
-            var employee = _mapper.Map<Employee>(employeeCreateDto);
-            employee.Id = GenerateEmployeeId();
-
-            employee.Address = _mapper.Map<Address>(employeeCreateDto.Address);
-
-            employee.Skills = employeeCreateDto.Skills.Select(s => _mapper.Map<Skill>(s)).ToList();
-
-            await _employeeRepository.AddAsync(employee);
-
-            return _mapper.Map<EmployeeDto>(employee);
+            catch (Exception ex)
+            {
+                throw new Exception($"Error creating employee: {ex.Message}");
+            }
+            
+            
         }
 
         public async Task<EmployeeDto> EditEmployeeAsync(string id, EmployeeDto employeeEditDto)
         {
+            try
+            {
+
+            
             var existingEmployee = await _employeeRepository.GetByStringIdAsync(id);
 
             if (existingEmployee == null)
@@ -84,6 +101,11 @@ namespace EmployeeAppBackend.Domain
             await _employeeRepository.UpdateAsync(existingEmployee);
 
             return _mapper.Map<EmployeeDto>(existingEmployee);
+                }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error updating employee: {ex.Message}");
+            }
         }
 
         public async Task DeleteEmployeeAsync(string id)
@@ -97,9 +119,18 @@ namespace EmployeeAppBackend.Domain
             await _employeeRepository.DeleteAsync(existingEmployee.Id);
         }
 
+        public async Task<IEnumerable<EmployeeDto>> SearchEmployeesAsync(string searchTerm)
+        {
+            var employees = await _employeeRepository.SearchAsync(e =>
+                e.FirstName.Contains(searchTerm) ||
+                e.LastName.Contains(searchTerm) ||
+                e.Email.Contains(searchTerm));
+            return _mapper.Map<IEnumerable<EmployeeDto>>(employees);
+        }
 
-        # region
-       
+
+        #region
+
         public static string GenerateEmployeeId()
         {
             const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

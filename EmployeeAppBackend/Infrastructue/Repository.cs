@@ -1,5 +1,6 @@
 ﻿using EmployeeAppBackend.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace EmployeeAppBackend.Infrastructue
 {
@@ -30,7 +31,7 @@ namespace EmployeeAppBackend.Infrastructue
 
         public async Task<T> AddAsync(T entity)
         {
-            await _dbSet.AddAsync(entity);
+            var saved = await _dbSet.AddAsync(entity);
             await _context.SaveChangesAsync();
             return entity;
         }
@@ -62,6 +63,21 @@ namespace EmployeeAppBackend.Infrastructue
         public async Task<T> GetByStringIdAsync(string id)
         {
             return await _dbSet.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<T>> SearchAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.Where(predicate).ToListAsync();
+        }
+
+        public async Task<IEnumerable<T>> GetAllIncludingAsync(params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return await query.ToListAsync();
         }
     }
 }

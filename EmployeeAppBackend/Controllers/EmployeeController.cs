@@ -52,7 +52,7 @@ namespace EmployeeAppBackend.Controllers
 
         // POST: api/employees
         [HttpPost]
-        public async Task<ActionResult<EmployeeDto>> CreateEmployee(EmployeeDto employeeCreateDto)
+        public async Task<ActionResult<EmployeeDto>> CreateEmployee(EmployeeCreateDto employeeCreateDto)
         {
             try
             {
@@ -90,6 +90,25 @@ namespace EmployeeAppBackend.Controllers
             {
                 await _employeeManager.DeleteEmployeeAsync(id);
                 return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<EmployeeDto>>> SearchEmployees([FromQuery] string searchTerm)
+        {
+            try
+            {
+                var employees = await _employeeManager.SearchEmployeesAsync(searchTerm);
+                return Ok(employees);
             }
             catch (ArgumentException ex)
             {

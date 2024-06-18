@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
 
 namespace EmployeeAppBackend.Domain
 {
@@ -12,6 +13,8 @@ namespace EmployeeAppBackend.Domain
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
+        [MaxLength(10)]
+        public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public Address Address { get; set; }
         public List<Skill> Skills { get; set; }

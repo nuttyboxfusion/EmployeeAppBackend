@@ -11,6 +11,8 @@ namespace EmployeeAppBackend.Mapping
             CreateMap<Employee, EmployeeDto>().ReverseMap();
             CreateMap<Skill, SkillDto>().ReverseMap();
             CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<SkillCreateDto, Skill>().ReverseMap();
+            CreateMap<EmployeeCreateDto, Employee>().ReverseMap();
             // CreateMap<Domain.Employee, Dtos.EmployeeDto>().ReverseMap();
         }
     }

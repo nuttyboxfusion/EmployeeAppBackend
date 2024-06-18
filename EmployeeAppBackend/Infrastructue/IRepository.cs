@@ -1,4 +1,6 @@
-﻿namespace EmployeeAppBackend.Infrastructue
+﻿using System.Linq.Expressions;
+
+namespace EmployeeAppBackend.Infrastructue
 {
     /// <summary>
     /// Generic interface repository for CRUD operations
@@ -13,5 +15,7 @@
         Task<T> UpdateAsync(T entity);
         Task DeleteAsync(Guid id);
         Task DeleteAsync(string id);
+        Task<IEnumerable<T>> SearchAsync(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> GetAllIncludingAsync(params Expression<Func<T, object>>[] includes);
     }
 }

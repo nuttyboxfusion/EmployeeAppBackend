@@ -25,7 +25,8 @@ namespace EmployeeAppBackend.Data
             modelBuilder.Entity<Employee>()
                 .HasMany(e => e.Skills)
                 .WithOne(s => s.Employee)
-                .HasForeignKey(s => s.EmployeeId);
+                .HasForeignKey(s => s.EmployeeId)
+                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
