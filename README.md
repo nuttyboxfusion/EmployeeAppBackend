@@ -1,7 +1,6 @@
 
 ### Back-End README
 
-```markdown
 # Employee Management System - Back End
 
 This is the back-end API for the Employee Management System, built with ASP.NET Core and Entity Framework Core.
