@@ -16,13 +16,13 @@ This is the front-end application for the Employee Management System, built with
    npm run dev
 
 ## Usage
-Navigate to http://localhost:3000 to access the application.
-You can view, add, edit, and delete employee records.
-Use the search bar to filter employees by name or email.
+1. Navigate to http://localhost:3000 to access the application.
+2. You can view, add, edit, and delete employee records.
+3. Use the search bar to filter employees by name or email.
 
 ## Folder Structure
-
-frontend/
+   ```bash
+   frontend/
 ├── public/
 ├── src/
 │   ├── api/
@@ -42,5 +42,8 @@ frontend/
 ├── .gitignore
 ├── package.json
 └── tsconfig.json
+
+
+
 
    
