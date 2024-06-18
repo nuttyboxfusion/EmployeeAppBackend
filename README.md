@@ -1,58 +1,47 @@
-# Employee Management System - Front End
 
-This is the front-end application for the Employee Management System, built with React and TypeScript, using Ant Design for UI components.
+### Back-End README
+
+```markdown
+# Employee Management System - Back End
+
+This is the back-end API for the Employee Management System, built with ASP.NET Core and Entity Framework Core.
 
 ## Installation
 
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/your-repository.git
-   cd your-repository/frontend
-2. Install dependencies:
-   ```bash
-   npm i
-3. Run Application
-   ```bash
-   npm run dev
+   cd your-repository/backend
 
-## Usage
-1. Navigate to http://localhost:3000 to access the application.
-2. You can view, add, edit, and delete employee records.
-3. Use the search bar to filter employees by name or email.
+## Connect Database
+1. update connectionstring on appsettings to your local machine
+2 apply migrations, run command on package manager console
+   ```bash
+   update-database
+
+## Entity Framework
+Entity Framework Core is used for database operations.
+
+1. EmployeeContext.cs: Database context for managing entity configurations and relationships.
+
 
 ## Folder Structure
    ```bash
-   frontend/
-├── public/
-├── src/
-│   ├── api/
-│   │   └── employeeApi.ts
-│   ├── components/
-│   │   ├── EmployeeCard.tsx
-│   │   └── editorModal.tsx
-│   ├── models/
-│   │   └── IEmployee.ts
-│   ├── pages/
-│   │   └── index.tsx
-│   ├── providers/
-│   │   └── employee.tsx
-│   ├── styles/
-│   │   └── page.module.css
-│   └── utils/
-├── .gitignore
-├── package.json
-└── tsconfig.json
+   backend/
+├── Controllers/
+│   └── EmployeesController.cs
+├── Data/
+│   ├── EmployeeContext.cs
+│   └── Repository/
+│       ├── GenericRepository.cs
+│       └── IGenericRepository.cs
+├── Models/
+│   ├── Employee.cs
+│   └── Skill.cs
+├── Services/
+│   └── EmployeeService.cs
+├── Program.cs
+├── Startup.cs
+├── appsettings.json
+└── EmployeeManagement.csproj
 
-## Dependencies
-
-1.React
-2. TypeScript
-3. Ant Design
-4. Axios (for API calls)
-5. Day.js (for date handling)
-6. Redux Actions
-
-
-
-
-   
